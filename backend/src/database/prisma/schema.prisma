@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  user_id    String
+  name       String
+  email      String
+  class      String
+  major      String
+  type       String
+  image_url  String
+  point      Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  report       Report[]
+  claim_report ClaimReward[]
+
+  @@id(user_id)
+  @@unique([name, email])
+  @@map("users")
+}
+
+model Report {
+  report_id       String
+  evidence        String
+  report_status   ReportStatus @default(OPEN)
+  description     String
+  location_detail String
+  created_at      DateTime     @default(now())
+
+  issued_by User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
+  user_id   String
+
+  Process CleaningProcess[]
+
+  @@id(report_id)
+  @@map("reports")
+}
+
+model Reward {
+  reward_id    String
+  reward_img   String
+  reward_name  String
+  reward_stock Int
+  reward_price Int
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  claim_reward ClaimReward[]
+
+  @@id(reward_id)
+  @@unique([reward_name])
+  @@map("rewards")
+}
+
+model ClaimReward {
+  claim_id   String
+  user_id    String
+  reward_id  String
+  claim_qty  Int
+  created_at DateTime @default(now())
+
+  Reward Reward @relation(fields: [reward_id], references: [reward_id], onDelete: NoAction, onUpdate: Cascade)
+  User   User   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: Cascade)
+
+  @@id(claim_id)
+  @@map("claim_reward_trx")
+}
+
+model Staff {
+  staff_id String
+  email    String
+  name     String
+  role     String
+  password String
+
+  Process CleaningProcess[]
+
+  @@id(staff_id)
+  @@unique([email, name])
+  @@map("staffs")
+}
+
+model CleaningProcess {
+  activity_id String
+  evidence    String?
+  report_id   String
+  staff_id    String
+  created_at  DateTime @default(now())
+  finished_at DateTime? 
+
+  Staff  Staff  @relation(fields: [staff_id], references: [staff_id], onDelete: NoAction, onUpdate: Cascade)
+  Report Report @relation(fields: [report_id], references: [report_id], onDelete: NoAction, onUpdate: Cascade)
+
+  @@id(activity_id)
+  @@map("cleaning_progress_trx")
+}
+
+enum ReportStatus {
+  OPEN
+  PROCESSED
+  DONE
+}

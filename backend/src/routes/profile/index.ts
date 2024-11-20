@@ -48,6 +48,7 @@ router.post(
         res.status(200).json({
           success: true,
           data: {
+            user_id: createdUser.user_id,
             email: userData.email,
             name: userData.fullName,
             class: userData.classInfo,
@@ -84,6 +85,7 @@ router.post(
         res.status(200).json({
           success: true,
           data: {
+            user_id: updatedUser.user_id,
             email: userData.email,
             name: userData.fullName,
             class: userData.classInfo,

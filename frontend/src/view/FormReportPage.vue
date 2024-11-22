@@ -70,6 +70,7 @@ import Joi from "joi";
 import { useRoute } from "vue-router";
 import { report } from "../services/reportService/formReportService";
 import { formReportStore } from "../store";
+import router from "../router";
 
 const route = useRoute();
 const evidence = ref(null);
@@ -85,7 +86,6 @@ const handleImageUpload = (event) => {
   if (file) {
     evidenceFile.value = file;
 
-    // Buat pratinjau gambar
     const reader = new FileReader();
     reader.onload = (e) => {
       capturedImage.value = e.target.result;
@@ -125,6 +125,7 @@ const handleSubmitForm = async () => {
     const response = await report(formData);
     console.log(response);
     console.log('sukses')
+    router.push({ name: "success-report" });
   } catch (error) {
     console.log(error);
   }

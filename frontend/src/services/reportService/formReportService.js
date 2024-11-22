@@ -7,11 +7,33 @@ export const report = async (reportData) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(response.data.data);
-    return response.data.data;
+    console.log(response.data.message);
+    return response.data.message;
   } catch (error) {
     console.log(error.response.data)
 
+    throw error;
+  }
+};
+
+export const getReport = async (userId = null) => {
+  try {
+    const url = userId ? `/reports?user_id=${userId}` : "/reports";
+    const reponse = await axiosInstance.get(url);
+    console.log(reponse)
+    return reponse.data.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getReportById = async (reportId) => {
+  try {
+    const response = await axiosInstance.get(`/reports/${reportId}`);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
     throw error;
   }
 };

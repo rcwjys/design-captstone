@@ -9,7 +9,6 @@ import {
   NotFoundError,
 } from "../../core/ApiError";
 import { compare, hash } from "bcryptjs";
-import authSchema from "../profile/schema";
 
 const router = Router();
 

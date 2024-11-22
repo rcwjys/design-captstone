@@ -38,7 +38,7 @@ model Report {
   issued_by User   @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
   user_id   String
 
-  Process CleaningProcess[]
+  process CleaningProcess[]
 
   @@id(report_id)
   @@map("reports")
@@ -67,7 +67,7 @@ model ClaimReward {
   claim_qty  Int
   created_at DateTime @default(now())
 
-  Reward Reward @relation(fields: [reward_id], references: [reward_id], onDelete: NoAction, onUpdate: Cascade)
+  reward Reward @relation(fields: [reward_id], references: [reward_id], onDelete: NoAction, onUpdate: Cascade)
   User   User   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: Cascade)
 
   @@id(claim_id)
@@ -81,7 +81,7 @@ model Staff {
   role     String
   password String
 
-  Process CleaningProcess[]
+  process CleaningProcess[]
 
   @@id(staff_id)
   @@unique([email, name])
@@ -96,8 +96,8 @@ model CleaningProcess {
   created_at  DateTime @default(now())
   finished_at DateTime? 
 
-  Staff  Staff  @relation(fields: [staff_id], references: [staff_id], onDelete: NoAction, onUpdate: Cascade)
-  Report Report @relation(fields: [report_id], references: [report_id], onDelete: NoAction, onUpdate: Cascade)
+  staff  Staff  @relation(fields: [staff_id], references: [staff_id], onDelete: NoAction, onUpdate: Cascade)
+  report Report @relation(fields: [report_id], references: [report_id], onDelete: NoAction, onUpdate: Cascade)
 
   @@id(activity_id)
   @@map("cleaning_progress_trx")

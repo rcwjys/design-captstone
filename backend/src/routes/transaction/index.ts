@@ -121,7 +121,7 @@ router.get(
             name: true,
           },
         },
-        Reward: {
+        reward: {
           select: {
             reward_id: true,
             reward_name: true,
@@ -210,13 +210,13 @@ router.get(
         evidence: true,
         created_at: true,
         finished_at: true,
-        Staff: {
+        staff: {
           select: {
             staff_id: true,
             name: true,
           },
         },
-        Report: {
+        report: {
           select: {
             report_id: true,
             report_status: true,

@@ -77,13 +77,58 @@ router.post(
 router.get(
   "/api/reports",
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const reports = (await prisma.report.findMany()).map((report) => ({
-      report_id: report.report_id,
-      evidence: report.evidence,
-      report_status: report.report_status,
-      description: report.description,
-      created_at: report.created_at,
-    }));
+    const userId = req.query.id;
+
+    if (userId === undefined) {
+      const reports = (await prisma.report.findMany()).map((report) => ({
+        report_id: report.report_id,
+        evidence: report.evidence,
+        report_status: report.report_status,
+        description: report.description,
+        created_at: report.created_at,
+      }));
+
+      res.status(200).json({
+        success: true,
+        data: reports,
+      });
+
+      return;
+    }
+
+    if (typeof userId !== "string") {
+      throw new BadRequestError("Invalid user ID format");
+    }
+
+    const regex = /^USRd+$/;
+
+    // sanitize the query params
+    if (regex.test(userId)) {
+      throw new BadRequestError("invalid user ID format");
+    }
+
+    // Check is valid users ?
+    const user = await prisma.user.count({
+      where: {
+        user_id: userId,
+      },
+    });
+
+    if (user === 0) {
+      throw new BadRequestError("User is not registered");
+    }
+
+    // Get the reports created by user
+    const reports = await prisma.report.findMany({
+      where: {
+        user_id: userId,
+      },
+      select: {
+        report_id: true,
+        created_at: true,
+        report_status: true,
+      },
+    });
 
     res.status(200).json({
       success: true,
@@ -93,9 +138,9 @@ router.get(
 );
 
 router.get(
-  "/api/reports/:id",
+  "/api/reports/:reportId",
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    const reportId = req.params.id;
+    const reportId = req.params.reportId;
 
     // check is report id available
     if (!reportId) {
@@ -109,15 +154,27 @@ router.get(
       throw new NotFoundError("Report is not found");
     }
 
-    const report = await prisma.report.findUnique({
+    const reports = await prisma.report.findUnique({
       where: {
         report_id: reportId,
+      },
+      include: {
+        process: {
+          include: {
+            staff: {
+              select: {
+                staff_id: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
     res.status(200).json({
       success: true,
-      data: report,
+      data: reports,
     });
   })
 );

@@ -63,7 +63,7 @@
                   {{ report.evidence }}
                 </h3>
                 <img
-                  :src="`/evidence/${report.evidence}`"
+                  :src="getEvidenceUrl(report.evidence)"
                   alt="Evidence Image"
                   class="w-64 h-64 object-cover rounded-lg border"
                 />
@@ -87,9 +87,12 @@ import { onMounted, ref } from "vue";
 import { getReport } from "../../services/staff/staffServices";
 
 const reports = ref([]);
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const getEvidenceUrl = (evidencePath) => `${BACKEND_URL}${evidencePath}`;
 
 const getReports = async () => {
   try {
+    console.log(BACKEND_URL)
     const response = await getReport();
     console.log(response);
     reports.value = response;

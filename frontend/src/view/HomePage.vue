@@ -25,12 +25,10 @@
 
       <Sidebar v-if="isSidebarVisible" @close="toggleSidebar" />
 
-      <!-- Hero Image Section -->
       <div class="flex justify-center items-center flex-grow">
         <img src="../assets/images/hero-img.jpg" alt="Hero Image" />
       </div>
 
-      <!-- Content Section with Button at the Bottom -->
       <div class="flex flex-col gap-2 w-full justify-end pb-6">
         <div class="text-center mb-4">
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quaerat
@@ -43,6 +41,9 @@
           Get Start
         </router-link>
       </div>
+    </div>
+    <div>
+      
     </div>
   </div>
 </template>

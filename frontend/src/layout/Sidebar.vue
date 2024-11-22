@@ -22,8 +22,8 @@
     <nav>
       <ul>
         <li>
-          <router-link :to="{ name: 'notification' }">
-            <div class="text-md">Notification</div>
+          <router-link :to="{ name: 'status' }">
+            <div class="text-md">Status</div>
           </router-link>
         </li>
         <li>

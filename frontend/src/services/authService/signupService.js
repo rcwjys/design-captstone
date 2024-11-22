@@ -24,3 +24,14 @@ export const isAuthenticated = () => {
     console.log(error);
   }
 };
+
+export const getProfile = async() => {
+  try {
+    const accessUserId = localStorage.getItem("userData");
+
+    const response = await axiosInstance.get(`/account/${accessUserId}`);
+    return response.data.data
+  } catch (error) {
+    console.log(error);
+  }
+};

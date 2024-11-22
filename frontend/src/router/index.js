@@ -7,6 +7,11 @@ import { isAuthenticated } from '../services/authService/signupService'
 import Notification from '../view/Notification.vue'
 import StaffLogin from '../view/staff/StaffLogin.vue'
 import StaffHomePage from '../view/staff/StaffHomePage.vue'
+import SuccessReport from '../components/SuccessReport.vue'
+import Status from '../view/Status.vue'
+import ProfilePage from '../view/ProfilePage.vue'
+import ReportDetail from '../view/ReportDetail.vue'
+import RewardPage from '../view/RewardPage.vue'
 
 const routes = [
     {
@@ -41,13 +46,31 @@ const routes = [
     {
         path: '/reward',
         name: 'reward',
-        component: Notification,
+        component: RewardPage,
         meta: { requiresAuth: true },
     },
     {
         path: '/profile',
         name: 'profile',
-        component: Notification,
+        component: ProfilePage,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/success-report',
+        name: 'success-report',
+        component: SuccessReport,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/report-detail/:reportId',
+        name: 'report-detail',
+        component: ReportDetail,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/status',
+        name: 'status',
+        component: Status,
         meta: { requiresAuth: true },
     },
     {

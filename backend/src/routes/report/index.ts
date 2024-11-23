@@ -80,7 +80,13 @@ router.get(
     const userId = req.query.id;
 
     if (userId === undefined) {
-      const reports = (await prisma.report.findMany()).map((report) => ({
+      const reports = (
+        await prisma.report.findMany({
+          orderBy: {
+            created_at: "asc",
+          },
+        })
+      ).map((report) => ({
         report_id: report.report_id,
         evidence: report.evidence,
         report_status: report.report_status,
@@ -125,6 +131,7 @@ router.get(
       },
       select: {
         report_id: true,
+        location_detail: true,
         created_at: true,
         report_status: true,
       },

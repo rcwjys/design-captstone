@@ -83,11 +83,12 @@ router.get(
       const reports = (
         await prisma.report.findMany({
           orderBy: {
-            created_at: "asc",
+            created_at: "desc",
           },
         })
       ).map((report) => ({
         report_id: report.report_id,
+        location_detail: report.location_detail,
         evidence: report.evidence,
         report_status: report.report_status,
         description: report.description,
@@ -128,6 +129,9 @@ router.get(
     const reports = await prisma.report.findMany({
       where: {
         user_id: userId,
+      },
+      orderBy: {
+        created_at: "desc",
       },
       select: {
         report_id: true,

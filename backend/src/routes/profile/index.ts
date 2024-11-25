@@ -30,8 +30,6 @@ router.post(
         },
       });
 
-      console.log(countUser);
-
       if (!countUser) {
         // Register user to database
         const createdUser = await prisma.user.create({

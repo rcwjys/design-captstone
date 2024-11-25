@@ -12,6 +12,7 @@ import Status from '../view/Status.vue'
 import ProfilePage from '../view/ProfilePage.vue'
 import ReportDetail from '../view/ReportDetail.vue'
 import RewardPage from '../view/RewardPage.vue'
+import StaffRegister from '../view/staff/StaffRegister.vue'
 
 const routes = [
     {
@@ -72,6 +73,11 @@ const routes = [
         name: 'status',
         component: Status,
         meta: { requiresAuth: true },
+    },
+    {
+      path: '/staff/register',
+      name: 'staff-register',
+      component: StaffRegister,
     },
     {
       path: '/staff/login',

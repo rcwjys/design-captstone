@@ -102,7 +102,8 @@ const handleImageUpload = (event) => {
 };
 
 const handleSubmitForm = async () => {
-  const userId = "USR1731644292757";
+  const userId = localStorage.getItem("userData");
+  console.log(userId);
   const evidence = capturedImage.value ? capturedImage.value.fileName : null;
   console.log('evidence', evidence);
 

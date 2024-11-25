@@ -1,10 +1,18 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Header -->
-    <header class="bg-red-600 text-white py-6 px-4 shadow-lg">
-      <h1 class="text-3xl font-bold">Home Dashboard</h1>
-      <p class="text-sm mt-2">Welcome back! Here's an overview of your data.</p>
-    </header>
+    <div class="flex justify-between items-center bg-red-600 text-white py-6 px-4 shadow-lg">
+      <div>
+        <h1 class="text-3xl font-bold">Home Dashboard</h1>
+        <p class="text-sm mt-2">
+          Welcome back! Here's an overview of your data.
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <button>Rewards</button>
+        <button>Transactions</button>
+      </div>
+    </div>
 
     <!-- Main Content -->
     <main class="px-6 py-10">
@@ -92,7 +100,7 @@ const getEvidenceUrl = (evidencePath) => `${BACKEND_URL}${evidencePath}`;
 
 const getReports = async () => {
   try {
-    console.log(BACKEND_URL)
+    console.log(BACKEND_URL);
     const response = await getReport();
     console.log(response);
     reports.value = response;

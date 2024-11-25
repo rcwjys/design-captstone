@@ -12,8 +12,8 @@
         />
       </div>
 
-      <div>
-        <h1 class="font-bold text-4xl">Hello!</h1>
+      <div class="mb-6">
+        <h1 class="font-bold text-4xl">Register</h1>
         <h2 class="text-gray-500 mt-2">
           Please input your username and password
         </h2>
@@ -21,9 +21,15 @@
       <form @submit.prevent="handleLogin">
         <div class="flex flex-col gap-2 w-full">
           <input
+            type="email"
+            placeholder="Email"
+            v-model="email"
+            class="p-4 rounded-full border"
+          />
+          <input
             type="text"
             placeholder="Username"
-            v-model="username"
+            v-model="name"
             class="p-4 rounded-full border"
           />
           <input
@@ -34,7 +40,7 @@
           />
         </div>
         <div class="flex justify-center w-full mt-10">
-          <Button>Login</Button>
+          <Button>Register</Button>
         </div>
       </form>
     </div>
@@ -42,20 +48,31 @@
 </template>
 
 <script setup>
-import Button from '../../components/Button.vue';
+import { ref } from "vue";
+import Button from "../../components/Button.vue";
+import { register } from "../../services/staff/staffServices";
+import { useRouter } from "vue-router";
+
+const email = ref("");
+const name = ref("");
+const password = ref("");
+const errorMessage = ref([]);
+
+const router = useRouter();
 
 const handleLogin = async () => {
-    const staffData = {
-        username: username.value,
-        password: password.value,
-    };
-    try {
-        await login(staffData);
-        console.log('login sukses');  
-        router.push({ name: 'staff-home' });
-    } catch (error) {
-        console.log(error);
-        errorMessage.value = error.response.data.message;
-    }
-}
+  const staffData = {
+    email: email.value,
+    name: name.value,
+    password: password.value,
+  };
+  try {
+    await register(staffData);
+    console.log("register sukses");
+    router.push({ name: "staff-home" });
+  } catch (error) {
+    console.log(error);
+    errorMessage.value = error;
+  }
+};
 </script>

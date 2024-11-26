@@ -13,7 +13,7 @@
           class="bg-white rounded-lg shadow p-4 flex flex-col justify-between"
         >
           <h3 class="text-lg font-semibold text-gray-800 mb-2">
-            Location: {{ report.location }}
+            Location: {{ report.location_detail }}
           </h3>
           <span class="text-gray-500">{{ formatDate(report.created_at) }}</span>
 
@@ -49,15 +49,18 @@
         </li>
       </ul>
     </div>
+    <BottomNavbar />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { getReport } from "../services/reportService/formReportService";
+import BottomNavbar from "../layout/BottomNavbar.vue";
 
 const reports = ref([]);
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const formatDate = (date) => {
   const options = {
     year: "numeric",
@@ -81,5 +84,3 @@ onMounted(() => {
   getReportData();
 });
 </script>
-
-<style></style>

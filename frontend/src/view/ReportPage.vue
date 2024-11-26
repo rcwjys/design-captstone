@@ -108,6 +108,7 @@ function Draw() {
 function TakePicture() {
   const canvas = document.querySelector("canvas"); 
   const capturedImage = formReportStore();
+  const navigationStore = formReportStore()
 
   canvas.toBlob((blob) => {
     if (blob) {
@@ -119,8 +120,10 @@ function TakePicture() {
       const imageUrl = URL.createObjectURL(blob);
       capturedImage.setCapturedImage({ file, fileName, imageUrl });
 
-      // Navigasi ke halaman form-report
-      router.push({ name: "form-report" });
+      if (navigationStore.redirectTo) {
+        router.push({ name: navigationStore.redirectTo });
+        navigationStore.clearRedirectTo();
+      }
     }
   }, "image/png");
 }

@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import Joi from "joi";
 import { useRoute } from "vue-router";
 import { report } from "../services/reportService/formReportService";
@@ -73,7 +73,6 @@ import { formReportStore } from "../store";
 import router from "../router";
 
 const route = useRoute();
-const evidence = ref(null);
 const description = ref("");
 const location_detail = ref("");
 const evidenceFile = ref(null);
@@ -103,16 +102,11 @@ const handleImageUpload = (event) => {
 
 const handleSubmitForm = async () => {
   const userId = localStorage.getItem("userData");
-  console.log(userId);
-  const evidence = capturedImage.value ? capturedImage.value.fileName : null;
-  console.log('evidence', evidence);
 
   const file = capturedImage.value ? capturedImage.value.file : null;
   if (!file) {
-    console.log("No file captured");
     return;
   }
-  console.log(file);
 
   const formData = {
     evidence: file,
@@ -120,17 +114,14 @@ const handleSubmitForm = async () => {
     location_detail: location_detail.value,
     user_id: userId,
   };
-  console.log(capturedImage);
 
   try {
     const response = await report(formData);
     console.log(response);
-    console.log('sukses')
     router.push({ name: "success-report" });
-  } catch (error) {
+  } catch (error) { 
     console.log(error);
   }
 };
 </script>
 
-<style></style>

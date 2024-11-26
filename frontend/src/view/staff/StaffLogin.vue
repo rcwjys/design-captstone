@@ -22,8 +22,8 @@
         <div class="flex flex-col gap-2 w-full">
           <input
             type="text"
-            placeholder="Username"
-            v-model="username"
+            placeholder="Email"
+            v-model="email"
             class="p-4 rounded-full border"
           />
           <input
@@ -42,11 +42,17 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import Button from '../../components/Button.vue';
+import { login } from '../../services/staff/staffServices';
+
+const email = ref("")
+const password = ref("")
+const errorMessage = ref([])
 
 const handleLogin = async () => {
     const staffData = {
-        username: username.value,
+        email: email.value,
         password: password.value,
     };
     try {

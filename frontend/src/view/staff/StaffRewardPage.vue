@@ -57,10 +57,39 @@
       </section>
     </div>
 
-    <BottomNavbar />
+    <StaffBottomNavbar />
   </div>
 </template>
 
 <script setup>
-import BottomNavbar from "../layout/BottomNavbar.vue";
+import StaffNavbar from "../../layout/StaffNavbar.vue";
+import StaffBottomNavbar from "../../layout/StaffBottomNavbar.vue";
+import { getReward } from "../../services/staff/staffServices";
+import { onMounted, ref } from "vue";
+import router from "../../router";
+import { formReportStore } from "../../store";
+
+const rewards = ref([]);
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const rewardStore = formReportStore()
+
+const getRewardData = async () => {
+  try {
+    const response = await getReward();
+    rewards.value = response;
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const navigateToEditReward = (rewardId) => {
+  console.log(rewardId);
+  rewardStore.setRewardId(rewardId);
+  router.push({ name: "edit-reward", params: { rewardId } });
+};
+
+onMounted(() => {
+  getRewardData();
+});
 </script>

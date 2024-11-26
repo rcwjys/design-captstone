@@ -13,6 +13,11 @@ import ProfilePage from '../view/ProfilePage.vue'
 import ReportDetail from '../view/ReportDetail.vue'
 import RewardPage from '../view/RewardPage.vue'
 import StaffRegister from '../view/staff/StaffRegister.vue'
+import StaffTransaction from '../view/staff/StaffTransaction.vue'
+import ConfirmationUpdate from '../view/staff/ConfirmationUpdate.vue'
+import StaffRewardPage from '../view/staff/StaffRewardPage.vue'
+import CreateReward from '../view/staff/CreateReward.vue'
+import EditReward from '../view/staff/EditReward.vue'
 
 const routes = [
     {
@@ -30,7 +35,7 @@ const routes = [
         path: '/camera',
         name: 'report',
         component: Report,
-        meta: { requiresAuth: true },
+        // meta: { requiresAuth: true },
     },
     {
         path: '/form-report',
@@ -88,6 +93,36 @@ const routes = [
         path: '/staff/home',
         name: 'staff-home',
         component: StaffHomePage,
+        // meta: { requiresAuth: true },
+    },
+    {
+        path: '/staff/reward',
+        name: 'staff-reward',
+        component: StaffRewardPage,
+        // meta: { requiresAuth: true },
+    },
+    {
+        path: '/staff/create-reward',
+        name: 'create-reward',
+        component: CreateReward,
+        // meta: { requiresAuth: true },
+    },
+    {
+        path: '/staff/edit-reward',
+        name: 'edit-reward',
+        component: EditReward,
+        // meta: { requiresAuth: true },
+    },
+    {
+        path: '/staff/transaction',
+        name: 'staff-transaction',
+        component: StaffTransaction,
+        // meta: { requiresAuth: true },
+    },
+    {
+        path: '/staff/confirmation-update',
+        name: 'staff-confirmation',
+        component: ConfirmationUpdate,
         // meta: { requiresAuth: true },
     },
   ]

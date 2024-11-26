@@ -1,19 +1,16 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Header -->
-    <div class="flex justify-between items-center bg-red-600 text-white py-6 px-4 shadow-lg">
+    <div
+      class="flex justify-between items-center bg-red-600 text-white py-4 px-2 shadow-lg"
+    >
       <div>
         <h1 class="text-3xl font-bold">Home Dashboard</h1>
         <p class="text-sm mt-2">
           Welcome back! Here's an overview of your data.
         </p>
       </div>
-      <div class="flex gap-4">
-        <button>Rewards</button>
-        <button>Transactions</button>
-      </div>
     </div>
-
     <!-- Main Content -->
     <main class="px-6 py-10">
       <!-- Statistics Cards -->
@@ -42,15 +39,6 @@
         </div>
       </section>
 
-      <!-- Activity Overview -->
-      <!-- <section class="bg-white p-6 shadow-md rounded-lg mb-10">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">Activity Overview</h2>
-          <div class="h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500">
-            <p>Graph Placeholder (e.g., activity chart)</p>
-          </div>
-        </section> -->
-
-      <!-- Recent Reports -->
       <section>
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Reports</h2>
         <div class="bg-white p-6 shadow-md rounded-lg">
@@ -79,39 +67,109 @@
                   {{ report.report_status }}
                 </h3>
               </div>
-              <button class="text-blue-600 hover:underline text-sm">
-                View Details
+              <button
+                @click="handleShowModal(report)"
+                class="text-blue-600 hover:underline text-sm"
+              >
+                Take Action
               </button>
             </li>
           </ul>
         </div>
       </section>
     </main>
+
+    <!-- Modal -->
+    <div
+      v-if="showModal"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    >
+      <div class="bg-white rounded-lg p-6 shadow-lg w-full max-w-md">
+        <h1 class="text-lg font-bold mb-4">Report Detail</h1>
+        <p class="text-gray-700 mb-2">
+          <strong>Report ID:</strong> {{ selectedReport.report_id }}
+        </p>
+        <p class="text-gray-700 mb-2">
+          <strong>Description:</strong> {{ selectedReport.description }}
+        </p>
+        <p class="text-gray-700 mb-2">
+          <strong>Evidence:</strong>
+          <img
+            :src="getEvidenceUrl(selectedReport.evidence)"
+            alt="Evidence Image"
+            class="w-32 h-32 object-cover rounded-lg border"
+          />
+        </p>
+        <p class="text-gray-700 mb-2">
+          <strong>Status:</strong> {{ selectedReport.report_status }}
+        </p>
+        <p class="text-gray-700 mb-6">Are you sure to take this report?</p>
+        <button
+          @click="closeModal"
+          class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+        >
+          No
+        </button>
+        <button
+          @click="handleCreateProgres(selectedReport.report_id)"
+          class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700"
+        >
+          Yes
+        </button>
+      </div>
+    </div>
+
+    <StaffBottomNavbar />
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { getReport } from "../../services/staff/staffServices";
+import { createProgres, getReport } from "../../services/staff/staffServices";
+import StaffNavbar from "../../layout/StaffNavbar.vue";
+import StaffBottomNavbar from "../../layout/StaffBottomNavbar.vue";
 
 const reports = ref([]);
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 const getEvidenceUrl = (evidencePath) => `${BACKEND_URL}${evidencePath}`;
 
+const showModal = ref(false);
+const selectedReport = ref({});
+
+const handleShowModal = (report) => {
+  selectedReport.value = report;
+  showModal.value = true;
+};
+
+const closeModal = () => {
+  showModal.value = false;
+};
+
 const getReports = async () => {
   try {
-    console.log(BACKEND_URL);
     const response = await getReport();
-    console.log(response);
     reports.value = response;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleCreateProgres = async (reportId) => {
+  const staffId = localStorage.getItem("staffId");
+  const progresData = {
+    report_id: reportId,
+    staff_id: staffId,
+  };
+
+  console.log(progresData);
+  try {
+    const response = await createProgres(progresData);
+    console.log(response);
   } catch (error) {
     console.log(error);
   }
 };
-
 onMounted(() => {
   getReports();
 });
 </script>
-
-<style></style>

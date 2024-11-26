@@ -72,6 +72,7 @@ router.get(
     const rewards = await prisma.reward.findMany();
 
     const formattedRewards = rewards.map((reward) => ({
+      reward_image: reward.reward_img,
       reward_id: reward.reward_id,
       reward_name: reward.reward_name,
       reward_stock: reward.reward_stock,

@@ -310,6 +310,13 @@ router.patch(
         },
         data: {
           report_status: "DONE",
+          issued_by: {
+            update: {
+              point: {
+                increment: 1,
+              },
+            },
+          },
         },
       });
     });

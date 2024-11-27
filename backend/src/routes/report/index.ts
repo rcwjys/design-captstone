@@ -54,17 +54,6 @@ router.post(
           user_id: validReportData.user_id,
         },
       });
-
-      await prisma.user.update({
-        where: {
-          user_id: createdReport.user_id,
-        },
-        data: {
-          point: {
-            increment: 1,
-          },
-        },
-      });
     });
 
     res.status(201).json({

@@ -32,7 +32,7 @@
           <div class="flex justify-between items-center text-sm mt-4">
             <router-link
               :to="`/report-detail/${report.report_id}`"
-              class="text-green-600 hover:underline bg-transparent border-none flex items-center transition-all duration-200 transform hover:scale-110"
+              class="text-blue-600 hover:underline bg-transparent border-none flex items-center transition-all duration-200 transform hover:scale-110"
             >
               <i class="fas fa-chevron-right mr-2"></i> View Details
             </router-link>
@@ -85,6 +85,6 @@ onMounted(() => {
 
 /* Custom hover effect for links */
 .router-link-exact-active {
-  color: #16a34a; /* Green color for active link */
+  color: #2563eb; /* Blue color for active link */
 }
 </style>

@@ -66,3 +66,17 @@
     </div>
   </div>
 </template>
+
+<style scoped>
+a.router-link-exact-active {
+  color: rgb(255, 255, 255);
+}
+
+a:hover {
+  color: red;
+}
+
+a.router-link-active {
+  color: red;
+}
+</style>

@@ -1,71 +1,46 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <!-- Header -->
-    <div class="bg-gradient-to-r from-red-600 to-pink-500 text-white py-8 text-center shadow-lg rounded-b-lg">
-      <h1 class="text-4xl font-extrabold">Status Report</h1>
-      <p class="text-lg">Laporan terbaru Anda</p>
+    <!-- Mobile-Friendly Header Section -->
+    <div class="py-3 text-center bg-red-600 text-white shadow-md">
+      <h1 class="text-3xl font-extrabold sm:text-2xl">Status Report</h1>
+      <p class="text-sm sm:text-xs">Laporan terbaru Anda</p>
     </div>
 
-    <!-- Main Content -->
-    <div class="max-w-6xl mx-auto p-6">
-      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Main Content Section -->
+    <div class="max-w-5xl mx-auto p-6">
+      <ul class="space-y-6">
         <li
           v-for="report in reports"
           :key="report.report_id"
-          class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col justify-between"
+          class="bg-white p-4 rounded-lg shadow-md transform transition-all duration-200 hover:scale-105"
         >
-          <h3 class="text-xl font-semibold text-gray-800 mb-3">
-            Location: {{ report.location_detail }}
-          </h3>
-          <span class="text-gray-500 text-sm">{{ formatDate(report.created_at) }}</span>
-
-          <!-- Evidence Image -->
-          <div v-if="report.evidence" class="my-4">
-            <img
-              :src="`${backendUrl}${report.evidence}`"
-              alt="Evidence"
-              class="w-full h-40 object-cover rounded-lg"
-            />
+          <!-- Location Section with Icon -->
+          <div class="flex items-center mb-2">
+            <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
+            <h3 class="text-lg font-semibold text-gray-800">
+              Location: {{ report.location_detail }}
+            </h3>
           </div>
 
-          <p class="text-sm text-gray-700 mb-4">
-            {{ report.description }}
-          </p>
+          <!-- Date Section with Icon -->
+          <div class="flex items-center mb-4">
+            <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
+            <span class="text-gray-500">{{ formatDate(report.created_at) }}</span>
+          </div>
 
-          <!-- Status and View Details -->
-          <div class="flex justify-between items-center text-sm">
-            <span
-              :class="{
-                'text-green-600 font-semibold': report.report_status === 'OPEN',
-                'text-red-600 font-semibold': report.report_status !== 'OPEN',
-              }"
-              class="inline-flex items-center gap-2"
+          <!-- View Details Button with Hover Effect -->
+          <div class="flex justify-between items-center text-sm mt-4">
+            <router-link
+              :to="`/report-detail/${report.report_id}`"
+              class="text-green-600 hover:underline bg-transparent border-none flex items-center transition-all duration-200 transform hover:scale-110"
             >
-              <span
-                v-if="report.report_status === 'OPEN'"
-                class="w-3 h-3 bg-green-600 rounded-full"
-              ></span>
-              <span
-                v-else
-                class="w-3 h-3 bg-red-600 rounded-full"
-              ></span>
-              {{ report.report_status }}
-            </span>
-
-            <div>
-              <router-link
-                :to="`/report-detail/${report.report_id}`"
-                class="text-blue-600 hover:underline"
-              >
-                View Details
-              </router-link>
-            </div>
+              <i class="fas fa-chevron-right mr-2"></i> View Details
+            </router-link>
           </div>
         </li>
       </ul>
     </div>
 
-    <!-- Bottom Navbar -->
     <BottomNavbar />
   </div>
 </template>
@@ -95,7 +70,7 @@ const getReportData = async () => {
     reports.value = response;
     console.log(response);
   } catch (error) {
-    console.error(error);
+    console.error("Failed to fetch reports:", error);
   }
 };
 
@@ -105,30 +80,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Hover effects for the report cards */
-li:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+/* Add font-awesome link for icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 
-/* Subtle gradient for the header */
-.bg-gradient-to-r {
-  background: linear-gradient(45deg, #ff6f61, #ff466f);
-}
-
-/* Text styles */
-h1 {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 800;
-}
-
-p {
-  font-family: 'Roboto', sans-serif;
-}
-
-/* Responsive layout tweaks */
-@media (max-width: 640px) {
-  h1 {
-    font-size: 2xl;
-  }
+/* Custom hover effect for links */
+.router-link-exact-active {
+  color: #16a34a; /* Green color for active link */
 }
 </style>

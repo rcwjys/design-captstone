@@ -309,7 +309,7 @@ router.patch(
           report_id: activity.report_id,
         },
         data: {
-          report_status: "DONE",
+          report_status: "CLOSED",
           issued_by: {
             update: {
               point: {

@@ -158,7 +158,9 @@ router.get(
       where: {
         report_id: reportId,
       },
-      include: {
+      select: {
+        location_detail: true,
+        description: true,
         process: {
           include: {
             staff: {

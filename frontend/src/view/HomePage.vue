@@ -58,4 +58,5 @@ const navigateToCamera = (route) => {
   color: transparent;
   font-family: 'Poppins', sans-serif; /* Clean, modern font */
 }
+
 </style>

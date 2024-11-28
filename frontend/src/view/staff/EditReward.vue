@@ -91,6 +91,7 @@ import {
   updatedReward,
 } from "../../services/staff/staffServices";
 import { formReportStore } from "../../store";
+import router from "../../router";
 
 const rewards = ref([]);
 const rewardStore = formReportStore();
@@ -110,6 +111,7 @@ const handleEditReward = async () => {
   try {
     const response = await updatedReward(rewardData, rewardStore.rewardId);
     console.log(response);
+    router.push({ name: "staff-reward" });
   } catch (error) {
     console.log(error);
   }

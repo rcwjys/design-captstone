@@ -45,6 +45,7 @@
 import { ref } from 'vue';
 import Button from '../../components/Button.vue';
 import { login } from '../../services/staff/staffServices';
+import router from '../../router';
 
 const email = ref("")
 const password = ref("")
@@ -57,7 +58,6 @@ const handleLogin = async () => {
     };
     try {
         await login(staffData);
-        console.log('login sukses');  
         router.push({ name: 'staff-home' });
     } catch (error) {
         console.log(error);

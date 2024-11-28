@@ -37,3 +37,14 @@ export const getReportById = async (reportId) => {
     throw error;
   }
 };
+
+export const claimReward = async (rewardData) => {
+  try {
+    const response = await axiosInstance.post(`/claims`, rewardData);
+    console.log(response);
+    return response.data.data;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};

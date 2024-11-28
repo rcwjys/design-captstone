@@ -1,72 +1,99 @@
 <template>
-  <div class="flex-col w-full px-6 py-12 min-h-screen">
-    <h1 class="font-bold text-lg mb-10">Please Input Your Data Here!</h1>
-    <form @submit.prevent="handleSubmitForm" class="max-w-sm mx-auto">
-      <div class="mb-5" v-if="capturedImage">
-        <label class="block mb-2 text-sm font-medium text-gray-900"
-          >Preview Image</label
-        >
+  <div class="flex flex-col w-full px-6 py-12 min-h-screen bg-white">
+    <!-- Form Title -->
+    <h1 class="font-bold text-3xl mb-8 text-center text-gray-800 tracking-wide">
+      Input Your Data Here
+    </h1>
+
+    <!-- Form Container -->
+    <form
+      @submit.prevent="handleSubmitForm"
+      class="bg-white shadow-lg rounded-xl p-6 max-w-lg mx-auto space-y-6 transform transition-transform duration-300 hover:shadow-2xl"
+    >
+      <!-- Preview Image -->
+      <div v-if="capturedImage">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Preview Image
+        </label>
         <img
-          v-if="capturedImage && capturedImage.imageUrl"
           :src="capturedImage.imageUrl"
           alt="Captured Image"
-          class="w-full rounded-lg mb-4"
+          class="w-full h-48 object-cover rounded-lg border border-gray-300"
         />
       </div>
-      <div class="mb-5" v-if="!capturedImage">
-        <label class="block mb-2 text-sm font-medium text-gray-900"
-          >Evidence</label
+
+      <!-- Image Upload -->
+      <div v-else>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Upload Evidence
+        </label>
+        <div
+          class="border border-dashed border-gray-400 rounded-lg p-6 text-center hover:border-red-500 transition duration-200"
         >
-        <input
-          type="file"
-          accept="image/*"
-          id="fileInput"
-          @change="handleImageUpload"
-          class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 p-2.5"
-        />
+          <input
+            type="file"
+            accept="image/*"
+            id="fileInput"
+            @change="handleImageUpload"
+            class="hidden"
+          />
+          <label
+            for="fileInput"
+            class="text-sm font-medium text-red-600 cursor-pointer hover:text-red-800"
+          >
+            Click here to upload your evidence
+          </label>
+        </div>
       </div>
-      <div class="mb-5">
+
+      <!-- Location Field -->
+      <div>
         <label
           for="location_detail"
-          class="block mb-2 text-sm font-medium text-gray-900"
-          >Location</label
+          class="block text-sm font-medium text-gray-700 mb-2"
         >
+          Location
+        </label>
         <input
           type="text"
           id="location_detail"
           v-model="location_detail"
-          class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-full p-2.5"
-          placeholder="Kantin TULT"
+          class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-300 focus:outline-none transition-transform duration-200 transform hover:scale-105"
+          placeholder="Enter the location (e.g., Kantin TULT)"
           required
         />
       </div>
-      <div class="mb-5">
+
+      <!-- Description Field -->
+      <div>
         <label
           for="description"
-          class="block mb-2 text-sm font-medium text-gray-900"
-          >Description</label
+          class="block text-sm font-medium text-gray-700 mb-2"
         >
+          Description
+        </label>
         <textarea
           id="description"
           v-model="description"
           rows="4"
-          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
-          placeholder="Deskripsi penemuan sampah..."
+          class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-300 focus:outline-none transition-transform duration-200 transform hover:scale-105"
+          placeholder="Describe the issue or situation here..."
         ></textarea>
       </div>
+
+      <!-- Submit Button -->
       <button
         type="submit"
-        class="bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl text-lg w-full"
+        class="w-full py-3 bg-red-500 text-white text-lg font-bold rounded-lg shadow-lg hover:bg-red-600 focus:ring focus:ring-red-300 transition-transform duration-300 transform hover:translate-y-1"
       >
-        Submit
+        Submit Data
       </button>
     </form>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import Joi from "joi";
+import { computed, ref } from "vue";
 import { useRoute } from "vue-router";
 import { report } from "../services/reportService/formReportService";
 import { formReportStore } from "../store";
@@ -75,24 +102,16 @@ import router from "../router";
 const route = useRoute();
 const description = ref("");
 const location_detail = ref("");
-const evidenceFile = ref(null);
-
 const imageStore = formReportStore();
 const capturedImage = computed(() => imageStore.capturedImage);
 
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
-    evidenceFile.value = file;
-
     const reader = new FileReader();
     reader.onload = (e) => {
-      capturedImage.value = e.target.result;
-    };
-    reader.onload = (e) => {
       imageStore.setCapturedImage({
-        file: file,
-        fileName: file.name,
+        file,
         imageUrl: e.target.result,
       });
     };
@@ -102,9 +121,10 @@ const handleImageUpload = (event) => {
 
 const handleSubmitForm = async () => {
   const userId = localStorage.getItem("userData");
+  const file = capturedImage.value?.file;
 
-  const file = capturedImage.value ? capturedImage.value.file : null;
   if (!file) {
+    alert("Please upload an image before submitting.");
     return;
   }
 
@@ -116,12 +136,11 @@ const handleSubmitForm = async () => {
   };
 
   try {
-    const response = await report(formData);
-    console.log(response);
+    await report(formData);
     router.push({ name: "success-report" });
-  } catch (error) { 
-    console.log(error);
+  } catch (error) {
+    console.error(error);
+    alert("An error occurred while submitting your data.");
   }
 };
 </script>
-

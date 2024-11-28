@@ -1,54 +1,71 @@
 <template>
   <div class="min-h-screen bg-gray-50">
-    <div class="bg-red-600 text-white py-6 text-center shadow">
-      <h1 class="text-3xl font-bold">Status Report</h1>
-      <p class="text-sm">Laporan terbaru Anda</p>
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-red-600 to-pink-500 text-white py-8 text-center shadow-lg rounded-b-lg">
+      <h1 class="text-4xl font-extrabold">Status Report</h1>
+      <p class="text-lg">Laporan terbaru Anda</p>
     </div>
 
-    <div class="max-w-5xl mx-auto p-6">
-      <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto p-6">
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         <li
           v-for="report in reports"
           :key="report.report_id"
-          class="bg-white rounded-lg shadow p-4 flex flex-col justify-between"
+          class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col justify-between"
         >
-          <h3 class="text-lg font-semibold text-gray-800 mb-2">
+          <h3 class="text-xl font-semibold text-gray-800 mb-3">
             Location: {{ report.location_detail }}
           </h3>
-          <span class="text-gray-500">{{ formatDate(report.created_at) }}</span>
+          <span class="text-gray-500 text-sm">{{ formatDate(report.created_at) }}</span>
 
-          <div v-if="report.evidence" class="mb-4">
+          <!-- Evidence Image -->
+          <div v-if="report.evidence" class="my-4">
             <img
               :src="`${backendUrl}${report.evidence}`"
               alt="Evidence"
-              class="w-full h-40 object-cover rounded"
+              class="w-full h-40 object-cover rounded-lg"
             />
           </div>
 
-          <p class="text-sm text-gray-600 mb-4">
+          <p class="text-sm text-gray-700 mb-4">
             {{ report.description }}
           </p>
 
+          <!-- Status and View Details -->
           <div class="flex justify-between items-center text-sm">
             <span
               :class="{
-                'text-green-600 font-bold': report.report_status === 'OPEN',
-                'text-red-600 font-bold': report.report_status !== 'OPEN',
+                'text-green-600 font-semibold': report.report_status === 'OPEN',
+                'text-red-600 font-semibold': report.report_status !== 'OPEN',
               }"
+              class="inline-flex items-center gap-2"
             >
+              <span
+                v-if="report.report_status === 'OPEN'"
+                class="w-3 h-3 bg-green-600 rounded-full"
+              ></span>
+              <span
+                v-else
+                class="w-3 h-3 bg-red-600 rounded-full"
+              ></span>
               {{ report.report_status }}
             </span>
+
             <div>
               <router-link
                 :to="`/report-detail/${report.report_id}`"
-                class="text-green-600"
-                >View Details
+                class="text-blue-600 hover:underline"
+              >
+                View Details
               </router-link>
             </div>
           </div>
         </li>
       </ul>
     </div>
+
+    <!-- Bottom Navbar -->
     <BottomNavbar />
   </div>
 </template>
@@ -77,10 +94,41 @@ const getReportData = async () => {
     const response = await getReport();
     reports.value = response;
     console.log(response);
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 onMounted(() => {
   getReportData();
 });
 </script>
+
+<style scoped>
+/* Hover effects for the report cards */
+li:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Subtle gradient for the header */
+.bg-gradient-to-r {
+  background: linear-gradient(45deg, #ff6f61, #ff466f);
+}
+
+/* Text styles */
+h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Responsive layout tweaks */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2xl;
+  }
+}
+</style>

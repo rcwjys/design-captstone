@@ -1,14 +1,17 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Header -->
-    <div class="flex justify-between items-center bg-red-600 text-white py-4 px-6 shadow-lg">
+    <div
+      class="flex justify-between items-center bg-red-600 text-white py-4 px-6 shadow-lg"
+    >
       <h1 class="text-3xl font-bold">Rewards</h1>
     </div>
 
     <div class="p-4">
-
       <!-- Rewards List -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <section
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      >
         <div
           v-for="reward in rewards"
           :key="reward.reward_id"
@@ -28,8 +31,15 @@
 
           <!-- Reward Info -->
           <div class="text-sm text-gray-600 mb-4">
-            <p><strong>Stock:</strong> {{ reward.reward_stock }}</p>
-            <p><strong>Price:</strong> ${{ reward.reward_price }}</p>
+            <pi><strong>Stock:</strong> {{ reward.reward_stock }}</pi>
+            <p>
+              <strong>Price:</strong>
+              {{
+                reward.reward_price <= 1
+                  ? reward.reward_price + " point"
+                  : reward.reward_price + " points"
+              }}
+            </p>
           </div>
 
           <!-- Action Buttons -->
@@ -68,15 +78,13 @@ const getRewardData = async () => {
   }
 };
 
-const handleClaimReward = async (rewardId) => { 
-
+const handleClaimReward = async (rewardId) => {
   const rewardData = {
     reward_id: rewardId,
-    user_id : localStorage.getItem("userData"),
-    claim_qty : 1
-
-  }
-  console.log(rewardData)
+    user_id: localStorage.getItem("userData"),
+    claim_qty: 1,
+  };
+  console.log(rewardData);
   try {
     const response = await claimReward(rewardData);
     console.log(response);
@@ -84,11 +92,11 @@ const handleClaimReward = async (rewardId) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 onMounted(() => {
   getRewardData();
-})
+});
 
 // Add logic for fetching and handling rewards data (if applicable).
 </script>

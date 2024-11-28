@@ -1,17 +1,56 @@
 <template>
-  <div class="min-h-screen">
-    <div class="p-4">
-      <h1 class="text-3xl font-bold mb-4">Report Detail</h1>
-      <div class="border">
-        <h2 class="text-lg font-semibold mb-2">Report ID: {{ report.report_id }}</h2>
-        <p class="text-gray-600 mb-2">Description: {{ report.description }}</p>
-        <img :src="`${backendUrl}${report.evidence}`" alt="" />
-        <p class="text-gray-600 mb-2">
-          Report Status: {{ report.report_status }}
-        </p>
-        <p class="text-gray-600 mb-2">
-          Created At: {{ formatDate(report.created_at) }}
-        </p>
+  <div class="min-h-screen bg-gray-50 flex items-center justify-center">
+    <div class="w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transform transition-all duration-300">
+      <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Report Detail</h1>
+
+      <!-- Report Container -->
+      <div class="space-y-6">
+        <!-- Report ID -->
+        <div class="flex items-center justify-between border-b pb-4">
+          <h2 class="text-lg font-semibold text-gray-800">Report ID: <span class="text-blue-600">{{ report.report_id }}</span></h2>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-4">
+          <span class="font-semibold text-gray-800">Description:</span>
+          <p class="text-gray-700 mt-2">{{ report.description }}</p>
+        </div>
+
+        <!-- Evidence Image (Only if available) -->
+        <div v-if="report.evidence" class="mb-6">
+          <img :src="`${backendUrl}${report.evidence}`" alt="Evidence" class="w-full h-auto rounded-lg shadow-md object-cover">
+        </div>
+
+        <!-- Status -->
+        <div class="mb-4">
+          <span class="font-semibold text-gray-800">Report Status : </span>
+          <span
+            :class="{
+              'text-green-600 font-bold': report.report_status === 'OPEN',
+              'text-red-600 font-bold': report.report_status !== 'OPEN'
+            }"
+            class="text-lg"
+          >
+            {{ report.report_status }}
+          </span>
+        </div>
+
+        <!-- Date Created -->
+        <div class="mb-6">
+          <span class="font-semibold text-gray-800">Created At:</span>
+          <p class="text-gray-700 mt-2">{{ formatDate(report.created_at) }}</p>
+        </div>
+
+        <!-- Action Button -->
+        <div class="text-center mt-6">
+          <router-link
+            :to="`/status`"
+            class="px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-all duration-200 transform hover:scale-105"
+          >
+            Back to Reports
+          </router-link>
+
+        </div>
       </div>
     </div>
   </div>
@@ -25,6 +64,7 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const report = ref([]);
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 const formatDate = (date) => {
   const options = {
     year: "numeric",
@@ -40,7 +80,6 @@ const getReportData = async () => {
   const reportId = route.params.reportId;
   try {
     const response = await getReportById(reportId);
-    console.log(response);
     report.value = response;
   } catch (error) {
     console.log(error);
@@ -52,4 +91,18 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style scoped>
+/* Add font-awesome link for icons */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* Hover effect for action button */
+.router-link-exact-active {
+  color: #2563eb; /* Blue color for active link */
+}
+
+@media (min-width: 768px) {
+  .text-lg {
+    font-size: 1.125rem;
+  }
+}
+</style>

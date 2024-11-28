@@ -16,10 +16,17 @@
         >
           <!-- Location Section with Icon -->
           <div class="flex items-center mb-2">
-            <i class="fas fa-map-marker-alt text-red-600 mr-2"></i>
+            <i class="  fas fa-map-marker-alt text-red-600 mr-2"></i>
             <h3 class="text-lg font-semibold text-gray-800">
               Location: {{ report.location_detail }}
             </h3>
+            <!-- Status Indicator -->
+            <span
+              v-if="report.report_status === 'OPEN'"
+              class="ml-4 inline-block bg-green-600 text-white text-xs py-1 px-2 rounded-full"
+            >
+              OPEN
+            </span>
           </div>
 
           <!-- Date Section with Icon -->

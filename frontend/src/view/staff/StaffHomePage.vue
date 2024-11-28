@@ -1,9 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Header -->
-    <div
-      class="flex justify-between items-center bg-red-600 text-white py-4 px-2 shadow-lg"
-    >
+    <div class="flex justify-between items-center bg-red-600 text-white py-4 px-2 shadow-lg">
       <div>
         <h1 class="text-3xl font-bold">Home Dashboard</h1>
         <p class="text-sm mt-2">
@@ -14,9 +12,7 @@
     <!-- Main Content -->
     <main class="px-6 py-10">
       <!-- Statistics Cards -->
-      <section
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10"
-      >
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
         <div class="bg-white p-6 shadow-md rounded-lg">
           <h2 class="text-gray-600 text-sm font-semibold">Total Reports</h2>
           <p class="text-4xl font-bold text-blue-600 mt-2">120</p>
@@ -52,20 +48,15 @@
                 <h3 class="text-gray-800 font-medium">
                   {{ report.report_id }}
                 </h3>
-                <h3 class="text-gray-800 font-medium">
-                  {{ report.description }}
-                </h3>
-                <h3 class="text-gray-800 font-medium">
-                  {{ report.evidence }}
-                </h3>
-                <img
-                  :src="getEvidenceUrl(report.evidence)"
-                  alt="Evidence Image"
-                  class="w-64 h-64 object-cover rounded-lg border"
-                />
-                <h3 class="text-gray-800 font-medium">
-                  {{ report.report_status }}
-                </h3>
+                <p class="text-gray-600">
+                  <strong>Location:</strong> {{ report.location }}
+                </p>
+                <p class="text-gray-600">
+                  <strong>Date:</strong> {{ formatDate(report.date) }}
+                </p>
+                <p class="text-gray-600">
+                  <strong>Time:</strong> {{ formatTime(report.time) }}
+                </p>
               </div>
               <button
                 @click="handleShowModal(report)"
@@ -93,15 +84,13 @@
           <strong>Description:</strong> {{ selectedReport.description }}
         </p>
         <p class="text-gray-700 mb-2">
-          <strong>Evidence:</strong>
-          <img
-            :src="getEvidenceUrl(selectedReport.evidence)"
-            alt="Evidence Image"
-            class="w-32 h-32 object-cover rounded-lg border"
-          />
+          <strong>Location:</strong> {{ selectedReport.location }}
         </p>
         <p class="text-gray-700 mb-2">
-          <strong>Status:</strong> {{ selectedReport.report_status }}
+          <strong>Date:</strong> {{ formatDate(selectedReport.date) }}
+        </p>
+        <p class="text-gray-700 mb-2">
+          <strong>Time:</strong> {{ formatTime(selectedReport.time) }}
         </p>
         <p class="text-gray-700 mb-6">Are you sure to take this report?</p>
         <button
@@ -131,7 +120,6 @@ import StaffBottomNavbar from "../../layout/StaffBottomNavbar.vue";
 
 const reports = ref([]);
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-const getEvidenceUrl = (evidencePath) => `${BACKEND_URL}${evidencePath}`;
 
 const showModal = ref(false);
 const selectedReport = ref({});
@@ -169,6 +157,17 @@ const handleCreateProgres = async (reportId) => {
     console.log(error);
   }
 };
+
+const formatDate = (date) => {
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  return new Date(date).toLocaleDateString(undefined, options);
+};
+
+const formatTime = (time) => {
+  const options = { hour: "2-digit", minute: "2-digit" };
+  return new Date(`1970-01-01T${time}Z`).toLocaleTimeString(undefined, options);
+};
+
 onMounted(() => {
   getReports();
 });

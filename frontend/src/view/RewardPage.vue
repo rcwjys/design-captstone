@@ -29,7 +29,7 @@
           <!-- Reward Info -->
           <div class="text-sm text-gray-600 mb-4">
             <p><strong>Stock:</strong> {{ reward.reward_stock }}</p>
-            <p><strong>Price:</strong> ${{ reward.reward_price }}</p>
+            <p><strong>Points:</strong> ${{ reward.reward_price }}</p>
           </div>
 
           <!-- Action Buttons -->

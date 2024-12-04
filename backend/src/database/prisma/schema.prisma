@@ -106,5 +106,5 @@ model CleaningProcess {
 enum ReportStatus {
   OPEN
   PROCESSED
-  DONE
+  CLOSED
 }

@@ -25,7 +25,7 @@ app.use("/", router);
 
 app.use("/evidence", express.static(path.join(__dirname, "public/evidence")));
 app.use("/reward", express.static(path.join(__dirname, "public/reward")));
-app.use("/report-evidence", express.static(path.join(__dirname, "public/trx")));
+app.use("/trx", express.static(path.join(__dirname, "public/trx")));
 
 app.use((req, res, next) => next(new NotFoundError()));
 

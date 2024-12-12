@@ -161,6 +161,7 @@ router.get(
       select: {
         location_detail: true,
         description: true,
+        report_status: true,
         process: {
           include: {
             staff: {
@@ -180,5 +181,16 @@ router.get(
     });
   })
 );
+
+// router.get("/test", (async (req: Request, res: Response, next: NextFunction) => {
+//   const data = await prisma.report.groupBy({
+//     by: ['location_detail'],
+//     _count: {
+//       location_detail: true,
+//     }
+//   });
+
+//   res.send(data);
+// }));
 
 export default router;

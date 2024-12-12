@@ -93,7 +93,7 @@ router.post(
         },
         data: {
           reward_stock: {
-            decrement: claim_qty, // Adjust the points
+            decrement: claim_qty, 
           },
         },
       });

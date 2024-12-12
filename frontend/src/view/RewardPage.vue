@@ -1,6 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <!-- Header -->
+    <Modal v-if="isModalOpen" />
+    <ModalError v-if="isModalErrorOpen">{{ errorMessage }}</ModalError>
     <div
       class="flex justify-between items-center bg-red-600 text-white py-4 px-6 shadow-lg"
     >
@@ -8,7 +9,6 @@
     </div>
 
     <div class="p-4">
-      <!-- Rewards List -->
       <section
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
       >
@@ -17,19 +17,16 @@
           :key="reward.reward_id"
           class="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300"
         >
-          <!-- Reward Name -->
           <h3 class="text-lg font-semibold text-gray-800 mb-4 truncate">
             {{ reward.reward_name }}
           </h3>
 
-          <!-- Reward Image -->
           <img
             :src="`${backendUrl}${reward.reward_image}`"
             :alt="reward.reward_name"
             class="w-full h-40 object-cover rounded mb-4"
           />
 
-          <!-- Reward Info -->
           <div class="text-sm text-gray-600 mb-4">
             <pi><strong>Stock:</strong> {{ reward.reward_stock }}</pi>
             <p>
@@ -42,7 +39,6 @@
             </p>
           </div>
 
-          <!-- Action Buttons -->
           <div class="mt-auto flex space-x-4">
             <button
               @click="handleClaimReward(reward.reward_id)"
@@ -64,9 +60,14 @@ import { onMounted, ref } from "vue";
 import BottomNavbar from "../layout/BottomNavbar.vue";
 import { getReward } from "../services/staff/staffServices";
 import { claimReward } from "../services/reportService/formReportService";
+import Modal from "../components/Modal.vue";
+import ModalError from "../components/ModalError.vue";
 
-const rewards = ref([]);
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const rewards = ref([]);
+const isModalOpen = ref(false);
+const isModalErrorOpen = ref(false);
+const errorMessage = ref([]);
 
 const getRewardData = async () => {
   try {
@@ -88,17 +89,21 @@ const handleClaimReward = async (rewardId) => {
   try {
     const response = await claimReward(rewardData);
     console.log(response);
-    alert("Reward claimed successfully!");
+    isModalOpen.value = true;
   } catch (error) {
+    isModalErrorOpen.value = true;
+    errorMessage.value = error;
     console.log(error);
   }
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
 };
 
 onMounted(() => {
   getRewardData();
 });
-
-// Add logic for fetching and handling rewards data (if applicable).
 </script>
 
 <style scoped>

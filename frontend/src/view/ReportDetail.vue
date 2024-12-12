@@ -1,44 +1,57 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-    <div class="w-full max-w-4xl p-8 bg-white rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105">
-      <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">Report Detail</h1>
+  <div
+    class="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4"
+  >
+    <div
+      class="w-full max-w-4xl p-8 bg-white rounded-lg shadow-xl transform transition-all duration-300 hover:scale-105"
+    >
+      <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">
+        Report Detail
+      </h1>
 
       <!-- Report Container -->
       <div class="space-y-8">
-        <!-- Report ID -->
-        <div class="flex items-center justify-between border-b-2 border-red-600 pb-4">
-          <h2 class="text-xl font-semibold text-gray-800">Report ID: <span class="text-red-600">{{ report.report_id }}</span></h2>
-        </div>
-
         <!-- Description -->
         <div class="mb-6">
           <span class="font-semibold text-gray-800 text-lg">Description:</span>
-          <p class="text-gray-700 mt-2 text-sm leading-relaxed">{{ report.description }}</p>
+          <p class="text-gray-700 mt-2 text-sm leading-relaxed">
+            {{ report.description }}
+          </p>
         </div>
-
-        <!-- Evidence Image (Only if available) -->
-        <div v-if="report.evidence" class="mb-6">
-          <img :src="`${backendUrl}${report.evidence}`" alt="Evidence" class="w-full h-auto rounded-lg shadow-md hover:shadow-xl object-cover transform transition-all duration-300">
-        </div>
-
-        <!-- Status -->
+        <!-- Location -->
         <div class="mb-6">
-          <span class="font-semibold text-gray-800 text-lg">Report Status: </span>
-          <span
-            :class="{
-              'text-green-600 font-bold': report.report_status === 'OPEN',
-              'text-red-600 font-bold': report.report_status !== 'OPEN'
-            }"
-            class="text-lg"
-          >
-            {{ report.report_status }}
-          </span>
+          <span class="font-semibold text-gray-800 text-lg">Location:</span>
+          <p class="text-gray-700 mt-2 text-sm leading-relaxed">
+            {{ report.location_detail }}
+          </p>
         </div>
 
-        <!-- Date Created -->
-        <div class="mb-6">
-          <span class="font-semibold text-gray-800 text-lg">Created At:</span>
-          <p class="text-gray-700 mt-2 text-sm">{{ formatDate(report.created_at) }}</p>
+        <div v-for="progres in report.process" :key="progres.activity_id">
+          <div class="mb-6">
+            <span class="font-semibold text-gray-800 text-lg"
+              >Finished at:</span
+            >
+            <p class="text-gray-700 mt-2 text-sm leading-relaxed">
+              {{ formatDate(progres.finished_at) }}
+            </p>
+          </div>
+
+          <div class="mb-6">
+            <span class="font-semibold text-gray-800 text-lg"
+              >Finished by:</span
+            >
+            <p class="text-gray-700 mt-2 text-sm leading-relaxed">
+              {{ progres.staff.name }}
+            </p>
+          </div>
+
+          <div v-if="progres.evidence" class="mb-6">
+            <img
+              :src="`${backendUrl}${progres.evidence}`"
+              alt="Evidence"
+              class="w-full h-auto rounded-lg shadow-md hover:shadow-xl object-cover transform transition-all duration-300"
+            />
+          </div>
         </div>
 
         <!-- Action Button -->
@@ -79,6 +92,7 @@ const getReportData = async () => {
   const reportId = route.params.reportId;
   try {
     const response = await getReportById(reportId);
+    console.log(response);
     report.value = response;
   } catch (error) {
     console.log(error);
@@ -86,6 +100,7 @@ const getReportData = async () => {
 };
 
 onMounted(() => {
+  console.log('tes');
   getReportData();
 });
 </script>

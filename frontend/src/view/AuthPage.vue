@@ -31,7 +31,10 @@
         />
       </div>
       <div class="flex justify-center w-full mt-10">
-        <Button>Login</Button>
+        <Button v-if="!isLoading">Login</Button>
+        <Button v-if="isLoading" disabled>
+          <span class="loading loading-spinner loading-md" />
+        </Button>
       </div>
     </form>
   </div>
@@ -49,6 +52,7 @@ const username = ref("");
 const password = ref("");
 const visible = ref(false);
 const errorMessage = ref([]);
+const isLoading = ref(false);
 
 const handleLogin = async () => {
   const userData = {
@@ -80,10 +84,15 @@ const handleLogin = async () => {
   try {
     await login(userData);
 
+    isLoading.value = true;
+    
     router.push({ name: "home" });
   } catch (error) {
+    isLoading.value = true;
     errorMessage.value = ["Username or password is incorrect"];
     console.log("eror", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>

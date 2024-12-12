@@ -44,7 +44,7 @@ export const claimReward = async (rewardData) => {
     console.log(response);
     return response.data.data;
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.log(error.response.data.message);
+    throw error.response.data.message;
   }
 };

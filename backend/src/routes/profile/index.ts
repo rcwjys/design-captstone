@@ -1,10 +1,10 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import asyncHandler from "../../helpers/asyncHandler";
 import { schemaValidator } from "../../helpers/validator";
 import authSchema from "./schema";
 import { loginIgracias } from "../../helpers/loginIgracias";
 import prisma from "../../database";
-import { BadRequestError } from "../../core/ApiError";
+import { BadRequestError, NotFoundError } from "../../core/ApiError";
 
 const router = Router();
 
@@ -104,5 +104,33 @@ router.post(
     }
   })
 );
+
+router.get('/api/account/points/:userId', (async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+
+  if (!userId) {
+    throw new BadRequestError();
+  }
+  
+  const user = await prisma.user.findUnique({
+    where: {
+      user_id: userId
+    }
+  });
+  
+  
+    if (!user) {
+      throw new NotFoundError("User is not found");
+    }
+
+  res.status(200).json({
+    success: true,
+    data: {
+      user_id: user.user_id,
+      name: user.name,
+      point: user.point
+    }
+  });
+})); 
 
 export default router;

@@ -42,6 +42,12 @@
         <div class="flex justify-center w-full mt-10">
           <Button>Register</Button>
         </div>
+        <p class="text-gray-500 mt-10">
+          Already have an account?
+          <span class="text-red-500"
+            ><a href="/staff/login">Login</a></span
+          >
+        </p>
       </form>
     </div>
   </div>

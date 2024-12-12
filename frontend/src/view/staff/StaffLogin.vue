@@ -36,32 +36,38 @@
         <div class="flex justify-center w-full mt-10">
           <Button>Login</Button>
         </div>
+        <p class="text-gray-500 mt-10">
+          Don't have an account?
+          <span class="text-red-500"
+            ><a href="/staff/register">Register</a></span
+          >
+        </p>
       </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import Button from '../../components/Button.vue';
-import { login } from '../../services/staff/staffServices';
-import router from '../../router';
+import { ref } from "vue";
+import Button from "../../components/Button.vue";
+import { login } from "../../services/staff/staffServices";
+import router from "../../router";
 
-const email = ref("")
-const password = ref("")
-const errorMessage = ref([])
+const email = ref("");
+const password = ref("");
+const errorMessage = ref([]);
 
 const handleLogin = async () => {
-    const staffData = {
-        email: email.value,
-        password: password.value,
-    };
-    try {
-        await login(staffData);
-        router.push({ name: 'staff-home' });
-    } catch (error) {
-        console.log(error);
-        errorMessage.value = error.response.data.message;
-    }
-}
+  const staffData = {
+    email: email.value,
+    password: password.value,
+  };
+  try {
+    await login(staffData);
+    router.push({ name: "staff-home" });
+  } catch (error) {
+    console.log(error);
+    errorMessage.value = error.response.data.message;
+  }
+};
 </script>

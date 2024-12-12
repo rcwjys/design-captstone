@@ -74,11 +74,13 @@
                 </td>
                 <td class="py-3 px-4 text-gray-800">
                   <button
-                    @click="navigateToCamera(
-                      'staff-confirmation',
-                      progres.activity_id,
-                      progres.report.report_id
-                    )"
+                    @click="
+                      navigateToCamera(
+                        'staff-confirmation',
+                        progres.activity_id,
+                        progres.report.report_id
+                      )
+                    "
                     class="bg-red-600 hover:bg-ref-700 text-white font-medium rounded-xl px-4 py-2.5 text-lg text-center"
                   >
                     Take Evidence
@@ -143,11 +145,14 @@
             </div>
             <div>
               <button
-                @click="navigateToCamera(
-                  'staff-confirmation',
-                  progres.activity_id,
-                  progres.report.report_id
-                )"
+                v-if="progres.report.report_status == 'PROCESSED'"
+                @click="
+                  navigateToCamera(
+                    'staff-confirmation',
+                    progres.activity_id,
+                    progres.report.report_id
+                  )
+                "
                 class="w-full bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg px-4 py-2"
               >
                 Take Evidence
@@ -161,7 +166,6 @@
     <StaffBottomNavbar />
   </div>
 </template>
-
 
 <script setup>
 import { onMounted, ref } from "vue";

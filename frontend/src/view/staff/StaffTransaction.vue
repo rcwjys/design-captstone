@@ -189,7 +189,7 @@ const navigateToCamera = (route, activity_id, report_id) => {
 };
 
 const adjustedEvidenceUrl = (evidence) => {
-  return `${backendUrl}${evidence.replace("/trx/", "/report-evidence/")}`;
+  return `${backendUrl}${evidence}`;
 };
 
 const getProgresData = async () => {

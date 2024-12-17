@@ -1,11 +1,24 @@
 <template>
   <div class="min-h-screen bg-gray-100">
-    <Modal v-if="isModalOpen" />
+    <Modal v-if="isModalOpen">
+      You can claim this reward to our staff. Please contact us if you have any
+      questions.
+    </Modal>
     <ModalError v-if="isModalErrorOpen">{{ errorMessage }}</ModalError>
     <div
       class="flex justify-between items-center bg-red-600 text-white py-4 px-6 shadow-lg"
     >
       <h1 class="text-3xl font-bold">Rewards</h1>
+    </div>
+    <div class="p-4">
+      <div
+        class="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300"
+      >
+        <p>
+          <strong>Your Points:</strong>
+          {{ pointUser }}
+        </p>
+      </div>
     </div>
 
     <div class="p-4">
@@ -62,12 +75,14 @@ import { getReward } from "../services/staff/staffServices";
 import { claimReward } from "../services/reportService/formReportService";
 import Modal from "../components/Modal.vue";
 import ModalError from "../components/ModalError.vue";
+import { getUserData } from "../services/authService/signupService";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const rewards = ref([]);
 const isModalOpen = ref(false);
 const isModalErrorOpen = ref(false);
 const errorMessage = ref([]);
+const pointUser = ref(0);
 
 const getRewardData = async () => {
   try {
@@ -97,12 +112,25 @@ const handleClaimReward = async (rewardId) => {
   }
 };
 
+const getPointUser = async () => {
+  try {
+    const userId = localStorage.getItem("userData");
+    console.log("user id", userId);
+
+    const response = await getUserData(userId);
+    pointUser.value = response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const closeModal = () => {
   isModalOpen.value = false;
 };
 
 onMounted(() => {
   getRewardData();
+  getPointUser();
 });
 </script>
 

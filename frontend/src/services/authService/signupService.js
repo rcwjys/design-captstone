@@ -15,11 +15,7 @@ export const login = async (userData) => {
 export const isAuthenticated = () => {
   try {
     const accessUserId = localStorage.getItem("userData");
-    if (!accessUserId) {
-      return false;
-    }
-
-    return true;
+    return !(!accessUserId);
   } catch (error) {
     console.log(error);
   }
@@ -33,5 +29,16 @@ export const getProfile = async() => {
     return response.data.data
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getUserData = async(userId) => {
+  try {
+    const response = await axiosInstance.get(`/account/points/${userId}`);
+    console.log('response service',response)
+    return response.data.data.point
+  } catch (error) {
+    console.log('eror service',error.response.data.message);
+    throw error.response.data.message
   }
 };

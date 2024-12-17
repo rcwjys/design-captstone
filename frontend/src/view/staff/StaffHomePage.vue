@@ -1,6 +1,9 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Header -->
+    <Modal v-if="isModalOpen"
+      >Success Take Action. Status update to in progress</Modal
+    >
     <div
       class="flex justify-between items-center bg-red-600 text-white py-4 px-2 shadow-lg"
     >
@@ -71,11 +74,13 @@
                     <span
                       class="font-medium"
                       :class="{
+                        'text-blue-500': report.report_status === 'OPEN',
                         'text-red-500': report.report_status === 'CLOSED',
                         'text-green-500': report.report_status === 'PROCESSED',
                         'text-gray-800':
                           report.report_status !== 'CLOSED' &&
-                          report.report_status !== 'PROCESSED',
+                          report.report_status !== 'PROCESSED' &&
+                          report.report_status !== 'OPEN',
                       }"
                     >
                       {{ report.report_status }}
@@ -85,9 +90,21 @@
                     Description: {{ report.description }}
                   </h3>
                 </div>
-                <Button 
-                  v-if="report.report_status !== 'CLOSED'"
-                @click="handleShowModal(report)">Take Action</Button>
+                <Button
+                  v-if="
+                    report.report_status !== 'CLOSED' &&
+                    report.report_status !== 'PROCESSED'
+                  "
+                  @click="handleShowModal(report)"
+                  >Take Action</Button
+                >
+                <router-link
+                  :to="{ name: 'staff-transaction' }"
+                  v-if="report.report_status == 'PROCESSED'"
+                  class="bg-blue-500 hover:bg-blue-600 text-white py-4 px-4 rounded-md text-center font-semibold"
+                >
+                  View Transaction
+                </router-link>
               </div>
             </li>
           </ul>
@@ -142,6 +159,7 @@ import { onMounted, ref } from "vue";
 import { createProgres, getReport } from "../../services/staff/staffServices";
 import StaffBottomNavbar from "../../layout/StaffBottomNavbar.vue";
 import Button from "../../components/Button.vue";
+import Modal from "../../components/Modal.vue";
 
 const reports = ref([]);
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -149,6 +167,8 @@ const getEvidenceUrl = (evidencePath) => `${BACKEND_URL}${evidencePath}`;
 
 const showModal = ref(false);
 const selectedReport = ref({});
+
+const isModalOpen = ref(false);
 
 const handleShowModal = (report) => {
   selectedReport.value = report;
@@ -181,6 +201,7 @@ const handleCreateProgres = async (reportId) => {
     const response = await createProgres(progresData);
     console.log(response);
     closeModal();
+    isModalOpen.value = true;
   } catch (error) {
     console.log(error);
   }

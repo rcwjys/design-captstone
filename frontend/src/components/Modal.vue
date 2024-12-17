@@ -55,12 +55,11 @@
                     <DialogTitle
                       as="h3"
                       class="text-base font-semibold text-gray-900"
-                      >Claim Success</DialogTitle
+                      >Success</DialogTitle
                     >
                     <div class="mt-2">
                       <p class="text-sm text-gray-500">
-                        You can claim this reward to our staff. Please contact us
-                        if you have any questions.
+                        <slot />
                       </p>
                     </div>
                   </div>
@@ -71,7 +70,7 @@
               >
                 <button
                   type="button"
-                  class=" w-full justify-center rounded-md bg-red-600 px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                  class="w-full justify-center rounded-md bg-red-600 px-3 py-2 text-md font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                   @click="open = false"
                 >
                   Close

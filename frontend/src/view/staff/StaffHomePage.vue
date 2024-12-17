@@ -61,7 +61,7 @@
                 <div class="flex justify-center">
                   <img
                     :src="getEvidenceUrl(report.evidence)"
-                    alt="Evidence Image"
+                    alt="Evidence"
                     class="object-cover rounded-lg border text-center w-full"
                   />
                 </div>

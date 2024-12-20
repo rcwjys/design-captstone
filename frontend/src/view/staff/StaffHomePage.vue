@@ -17,28 +17,58 @@
     <!-- Main Content -->
     <main class="px-6 pt-4 pb-16">
       <!-- Statistics Cards -->
-      <!-- <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <section
+        class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-6 mb-4"
+      >
         <div class="bg-white p-6 shadow-md rounded-lg">
           <h2 class="text-gray-600 text-sm font-semibold">Total Reports</h2>
-          <p class="text-4xl font-bold text-blue-600 mt-2">120</p>
-          <p class="text-sm text-gray-500">+12 this week</p>
+          <p class="text-4xl font-bold text-blue-600 mt-2">
+            {{ summary.totalReports }}
+          </p>
         </div>
         <div class="bg-white p-6 shadow-md rounded-lg">
-          <h2 class="text-gray-600 text-sm font-semibold">Pending Actions</h2>
-          <p class="text-4xl font-bold text-red-500 mt-2">8</p>
-          <p class="text-sm text-gray-500">-3 since yesterday</p>
+          <h2 class="text-gray-600 text-sm font-semibold">Open Actions</h2>
+          <p class="text-4xl font-bold text-purple-500 mt-2">
+            {{ summary.openReports }}
+          </p>
         </div>
         <div class="bg-white p-6 shadow-md rounded-lg">
-          <h2 class="text-gray-600 text-sm font-semibold">Resolved Cases</h2>
-          <p class="text-4xl font-bold text-green-500 mt-2">95</p>
-          <p class="text-sm text-gray-500">+5 this week</p>
+          <h2 class="text-gray-600 text-sm font-semibold">Prosessed Cases</h2>
+          <p class="text-4xl font-bold text-green-500 mt-2">
+            {{ summary.processedReports }}
+          </p>
         </div>
         <div class="bg-white p-6 shadow-md rounded-lg">
-          <h2 class="text-gray-600 text-sm font-semibold">New Users</h2>
-          <p class="text-4xl font-bold text-purple-600 mt-2">20</p>
-          <p class="text-sm text-gray-500">+8 today</p>
+          <h2 class="text-gray-600 text-sm font-semibold">Closed</h2>
+          <p class="text-4xl font-bold text-red-600 mt-2">
+            {{ summary.closedReports }}
+          </p>
         </div>
-      </section> -->
+      </section>
+
+      <div class="flex justify-start mb-6">
+        <router-link :to="{ name: 'staff-graphic' }">
+          <div class="flex justify-center items-center gap-2 text-blue-500">
+            View more statistics
+            <span
+              ><svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-4"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+                />
+              </svg>
+            </span>
+          </div>
+        </router-link>
+      </div>
 
       <section>
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Recent Reports</h2>
@@ -169,6 +199,7 @@ const showModal = ref(false);
 const selectedReport = ref({});
 
 const isModalOpen = ref(false);
+const summary = ref([]);
 
 const handleShowModal = (report) => {
   selectedReport.value = report;
@@ -184,6 +215,24 @@ const getReports = async () => {
     const response = await getReport();
     console.log(response);
     reports.value = response;
+
+    const totalReports = response.length;
+    const openReports = response.filter(
+      (report) => report.report_status === "OPEN"
+    ).length;
+    const processedReports = response.filter(
+      (report) => report.report_status === "PROCESSED"
+    ).length;
+    const closedReports = response.filter(
+      (report) => report.report_status === "CLOSED"
+    ).length;
+
+    summary.value = {
+      totalReports: totalReports,
+      openReports: openReports,
+      processedReports: processedReports,
+      closedReports: closedReports,
+    };
   } catch (error) {
     console.error(error);
   }

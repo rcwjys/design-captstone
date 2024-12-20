@@ -12,21 +12,21 @@
     >
       <!-- Preview Image -->
       <div v-if="capturedImage">
-        <label class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="block text-sm font-medium text-gray-700 mb-2">
           Preview Image
-        </label>
+        </div>
         <img
           :src="capturedImage.imageUrl"
-          alt="Captured Image"
-          class="w-full h-48 object-cover rounded-lg border border-gray-300"
+          alt="Captured"
+          class="w-80 h-48 object-cover rounded-lg border border-gray-300"
         />
       </div>
 
       <!-- Image Upload -->
       <div v-else>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="block text-sm font-medium text-gray-700 mb-2">
           Upload Evidence
-        </label>
+        </div>
         <div
           class="border border-dashed border-gray-400 rounded-lg p-6 text-center hover:border-red-500 transition duration-200"
         >
@@ -54,14 +54,34 @@
         >
           Location
         </label>
-        <input
+        <select
           type="text"
           id="location_detail"
           v-model="location_detail"
           class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-300 focus:outline-none transition-transform duration-200 transform hover:scale-105"
           placeholder="Enter the location (e.g., Kantin TULT)"
           required
-        />
+        >
+          <option value="" disabled>Select a location</option>
+          <option
+            v-for="(location, index) in locations"
+            :key="index"
+            :value="location"
+          >
+            {{ location }}
+          </option>
+          <option value="Lainnya">Lainnya</option>
+        </select>
+
+        <div v-if="location_detail === 'Lainnya'" class="mt-4">
+          <input
+            type="text"
+            v-model="customLocation"
+            placeholder="Enter custom location"
+            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-red-300 focus:outline-none transition-transform duration-200 transform hover:scale-105"
+            required
+          />
+        </div>
       </div>
 
       <!-- Description Field -->
@@ -105,6 +125,15 @@ const location_detail = ref("");
 const imageStore = formReportStore();
 const capturedImage = computed(() => imageStore.capturedImage);
 
+const locations = ref([
+  "Kantin TULT",
+  "Gedung A",
+  "Gedung B",
+  "Lapangan Utama",
+  "Toilet Umum",
+]);
+const customLocation = ref("");
+
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
   if (file) {
@@ -128,10 +157,17 @@ const handleSubmitForm = async () => {
     return;
   }
 
+  const finalLocation =
+    location_detail.value === "Lainnya"
+      ? customLocation.value
+      : location_detail.value;
+
+  console.log("Final Location:", finalLocation);
+
   const formData = {
     evidence: file,
     description: description.value,
-    location_detail: location_detail.value,
+    location_detail: finalLocation,
     user_id: userId,
   };
 

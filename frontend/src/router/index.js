@@ -18,6 +18,7 @@ import ConfirmationUpdate from '../view/staff/ConfirmationUpdate.vue'
 import StaffRewardPage from '../view/staff/StaffRewardPage.vue'
 import CreateReward from '../view/staff/CreateReward.vue'
 import EditReward from '../view/staff/EditReward.vue'
+import GraphicCart from '../view/staff/GraphicCart.vue'
 
 const routes = [
     {
@@ -123,6 +124,12 @@ const routes = [
         path: '/staff/confirmation-update',
         name: 'staff-confirmation',
         component: ConfirmationUpdate,
+        // meta: { requiresAuth: true },
+    },
+    {
+        path: '/staff/graphic',
+        name: 'staff-graphic',
+        component: GraphicCart,
         // meta: { requiresAuth: true },
     },
   ]

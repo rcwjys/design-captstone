@@ -65,6 +65,7 @@ model ClaimReward {
   user_id    String
   reward_id  String
   claim_qty  Int
+  claim_status  ClaimRewardStatus
   created_at DateTime @default(now())
 
   reward Reward @relation(fields: [reward_id], references: [reward_id], onDelete: NoAction, onUpdate: Cascade)
@@ -107,4 +108,9 @@ enum ReportStatus {
   OPEN
   PROCESSED
   CLOSED
+}
+
+enum ClaimRewardStatus {
+  PROCESS
+  COMPLETE
 }

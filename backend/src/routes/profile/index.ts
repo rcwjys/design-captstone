@@ -105,32 +105,34 @@ router.post(
   })
 );
 
-router.get('/api/account/points/:userId', (async (req: Request, res: Response) => {
-  const userId = req.params.userId;
+router.get(
+  "/api/account/points/:userId",
+  async (req: Request, res: Response) => {
+    const userId = req.params.userId;
 
-  if (!userId) {
-    throw new BadRequestError();
-  }
-  
-  const user = await prisma.user.findUnique({
-    where: {
-      user_id: userId
+    if (!userId) {
+      throw new BadRequestError();
     }
-  });
-  
-  
+
+    const user = await prisma.user.findUnique({
+      where: {
+        user_id: userId,
+      },
+    });
+
     if (!user) {
       throw new NotFoundError("User is not found");
     }
 
-  res.status(200).json({
-    success: true,
-    data: {
-      user_id: user.user_id,
-      name: user.name,
-      point: user.point
-    }
-  });
-})); 
+    res.status(200).json({
+      success: true,
+      data: {
+        user_id: user.user_id,
+        name: user.name,
+        point: user.point,
+      },
+    });
+  }
+);
 
 export default router;

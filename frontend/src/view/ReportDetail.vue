@@ -100,7 +100,7 @@ const getReportData = async () => {
 };
 
 onMounted(() => {
-  console.log('tes');
+  console.log("tes");
   getReportData();
 });
 </script>

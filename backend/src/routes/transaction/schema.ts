@@ -17,4 +17,8 @@ export const closeProgressSchema = z.object({
   activity_id: z.string().min(1, "activity id is required"),
 });
 
+export const closeClaimSchema = z.object({
+  claim_id: z.string().min(1, "claim id is required"),
+});
+
 export default claimSchema;

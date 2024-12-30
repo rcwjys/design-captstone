@@ -3,6 +3,7 @@ import asyncHandler from "../../helpers/asyncHandler";
 import { schemaValidator } from "../../helpers/validator";
 import claimSchema, {
   cleanProgressSchema,
+  closeClaimSchema,
   closeProgressSchema,
 } from "./schema";
 import prisma from "../../database";
@@ -68,6 +69,7 @@ router.post(
         claim_id: "C".concat(Date.now().toString()),
         claim_qty,
         reward_id,
+        claim_status: "PROCESS",
         user_id,
       },
     });
@@ -93,7 +95,7 @@ router.post(
         },
         data: {
           reward_stock: {
-            decrement: claim_qty, 
+            decrement: claim_qty,
           },
         },
       });
@@ -104,6 +106,40 @@ router.post(
       success: true,
       data: {
         claim_id: createdTrx.claim_id,
+      },
+    });
+  })
+);
+
+router.patch(
+  claimUrl,
+  asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+    const { claim_id } = await schemaValidator(closeClaimSchema, req.body);
+
+    const claimTrx = await prisma.claimReward.findUnique({
+      where: {
+        claim_id: claim_id,
+      },
+    });
+
+    if (!claimTrx) {
+      throw new NotFoundError("Claim id is not found");
+    }
+
+    const updatedData = await prisma.claimReward.update({
+      where: {
+        claim_id: claim_id,
+      },
+      data: {
+        claim_status: "COMPLETE",
+      },
+    });
+
+    res.status(200).json({
+      sucess: true,
+      data: {
+        claim_id,
+        claim_status: updatedData.claim_status,
       },
     });
   })
@@ -128,6 +164,7 @@ router.get(
           },
         },
         claim_qty: true,
+        claim_status: true,
         created_at: true,
       },
     });

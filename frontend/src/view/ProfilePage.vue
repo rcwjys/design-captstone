@@ -9,13 +9,37 @@
       <div
         class="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-between hover:shadow-xl transition-shadow duration-300"
       >
-        <p>
-          <strong>Your Points:</strong>
-        </p>
+        <div class="flex items-center gap-4 mb-4">
+          <img
+            v-if="dataUser.image_url"
+            :src="dataUser.image_url"
+            alt="Profile Picture"
+            class="w-24 h-24 rounded-full border-2 border-gray-300 object-cover"
+          />
+          <h2 class="text-2xl font-semibold">
+            {{ dataUser.name || "Name not available" }}
+          </h2>
+        </div>
+        <div class="flex flex-col mb-2">
+          <strong>Email:</strong> {{ dataUser.email || "Email not available" }}
+        </div>
+        <div class="flex flex-col mb-2">
+          <strong>Class:</strong> {{ dataUser.class || "Class not available" }}
+        </div>
+        <div class="flex flex-col mb-2">
+          <strong>Major:</strong> {{ dataUser.major || "Major not available" }}
+        </div>
+        <div class="flex flex-col mb-2">
+          <strong>Type:</strong> {{ dataUser.type || "Type not available" }}
+        </div>
+        <div class="flex flex-col mb-2">
+          <strong>Points:</strong>
+          {{ dataUser.point || "Points not available" }}
+        </div>
       </div>
     </div>
     <div class="p-4">
-      <Button>Logout</Button>
+      <Button @click="handleLogout">Logout</Button>
     </div>
     <BottomNavbar />
   </div>
@@ -24,21 +48,25 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import BottomNavbar from "../layout/BottomNavbar.vue";
-import { getUserData } from "../services/authService/signupService";
 import Button from "../components/Button.vue";
 
-const dataUsers = ref([]);
+const dataUser = ref([]);
 
 const getDataUsers = async () => {
   try {
-    const userId = localStorage.getItem("userData");
-
-    const response = await getUserData(userId);
-    console.log("user", response);
-    dataUsers.value = response;
+    const dataUsers = localStorage.getItem("DataUser");
+    if (dataUsers) {
+      dataUser.value = JSON.parse(dataUsers);
+    }
   } catch (error) {
     console.log(error);
   }
+};
+
+const handleLogout = () => {
+  localStorage.removeItem("userData");
+  localStorage.removeItem("DataUser");
+  window.location.href = "/";
 };
 
 onMounted(() => {

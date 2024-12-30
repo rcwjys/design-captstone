@@ -4,6 +4,7 @@ export const login = async (userData) => {
   try {
     const response = await axiosInstance.post("/account", userData);
     localStorage.setItem("userData", response.data.data.user_id);
+    localStorage.setItem("DataUser", JSON.stringify(response.data.data));
     console.log(response.data.data);
     return response.data.data
   } catch (error) {

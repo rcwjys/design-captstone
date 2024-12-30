@@ -75,7 +75,7 @@ import { getReward } from "../services/staff/staffServices";
 import { claimReward } from "../services/reportService/formReportService";
 import Modal from "../components/Modal.vue";
 import ModalError from "../components/ModalError.vue";
-import { getUserData } from "../services/authService/signupService";
+import { getPointData } from "../services/authService/signupService";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 const rewards = ref([]);
@@ -117,7 +117,7 @@ const getPointUser = async () => {
     const userId = localStorage.getItem("userData");
     console.log("user id", userId);
 
-    const response = await getUserData(userId);
+    const response = await getPointData(userId);
     pointUser.value = response;
   } catch (error) {
     console.log(error);

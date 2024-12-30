@@ -35,6 +35,17 @@ export const getProfile = async() => {
 export const getUserData = async(userId) => {
   try {
     const response = await axiosInstance.get(`/account/points/${userId}`);
+    console.log('response data',response)
+    return response.data.data
+  } catch (error) {
+    console.log('eror service',error.response.data.message);
+    throw error.response.data.message
+  }
+};
+
+export const getPointData = async(userId) => {
+  try {
+    const response = await axiosInstance.get(`/account/points/${userId}`);
     console.log('response service',response)
     return response.data.data.point
   } catch (error) {

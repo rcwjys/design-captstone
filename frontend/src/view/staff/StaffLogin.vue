@@ -19,7 +19,7 @@
         </h2>
       </div>
       <form @submit.prevent="handleLogin">
-        <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col gap-2 w-full mt-3">
           <input
             type="text"
             placeholder="Email"

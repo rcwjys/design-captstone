@@ -1,26 +1,35 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <!-- Header -->
-    <div class="flex items-center bg-red-600 text-white py-4 px-2 shadow-lg">
+    <div class="flex items-center bg-red-600 text-white py-6 px-2 shadow-lg">
       <h1 class="text-3xl font-bold">Rewards Management</h1>
     </div>
 
-    <section class="flex flex-col mt-10">
+    <div class="flex justify-center p-4 bg-gray-100">
+      <router-link
+        :to="{ name: 'create-reward' }"
+        class="bg-red-600 px-6 py-3 text-white font-semibold rounded-lg text-center w-[80%]"
+      >
+        Create Reward
+      </router-link>
+    </div>
+
+    <section class="p-4">
       <div
         v-for="reward in rewards"
         :key="reward.reward_id"
-        class="w-96 max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 mx-auto mb-4"
+        class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow mx-auto mb-4"
       >
         <a href="#">
           <img
-            class="rounded-t-lg w-full h-32 object-fill"
+            class="rounded-t-lg w-full h-48 object-fill"
             :src="`${backendUrl}${reward.reward_image}`"
             :alt="reward.reward_name"
           />
         </a>
         <div class="p-5">
           <h5
-            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white capitalize"
+            class="mb-2 text-2xl font-bold tracking-tight text-gray-900 capitalize"
           >
             {{ reward.reward_name }}
           </h5>
@@ -48,23 +57,13 @@
       </div>
     </section>
 
-    <div class="fixed inset-x-0 top-[6%] flex justify-center p-4 bg-gray-100">
-      <router-link
-        :to="{ name: 'create-reward' }"
-        class="bg-red-600 px-6 py-3 text-white font-semibold rounded-lg text-center w-[80%]"
-      >
-        Create Reward
-      </router-link>
-    </div>
-
     <StaffBottomNavbar />
   </div>
 </template>
 
 <script setup>
-import StaffNavbar from "../../layout/StaffNavbar.vue";
 import StaffBottomNavbar from "../../layout/StaffBottomNavbar.vue";
-import { getReward } from "../../services/staff/staffServices";
+import { deletedReward, getReward } from "../../services/staff/staffServices";
 import { onMounted, ref } from "vue";
 import router from "../../router";
 import { formReportStore } from "../../store";
@@ -87,6 +86,17 @@ const navigateToEditReward = (rewardId) => {
   console.log(rewardId);
   rewardStore.setRewardId(rewardId);
   router.push({ name: "edit-reward", params: { rewardId } });
+};
+
+const deleteReward = (rewardId) => {
+  if (confirm("Are you sure you want to delete this reward?")) {
+    try {
+      const response = deletedReward(rewardId);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 onMounted(() => {

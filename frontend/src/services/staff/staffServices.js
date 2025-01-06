@@ -115,3 +115,14 @@ export const updatedReward = async (rewardData, id) => {
     throw error;
   }
 };
+
+export const deletedReward = async (id) => {
+  try {
+    const response = await axiosInstance.delete(`/rewards/${id}`);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
